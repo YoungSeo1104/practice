@@ -1,4 +1,5 @@
 import express from 'express';
+import { validateUser } from './middlewares/validateUser.js';
 
 export const userRouter = express.Router();
 
@@ -50,7 +51,7 @@ userRouter.get('/:id', (req, res) => {
 });
 
 // POST /users - 새 사용자 생성
-userRouter.post('/', (req, res) => {
+userRouter.post('/', validateUser, (req, res) => {
   const { name, email } = req.body;
   if (!name || !email) {
     return res.status(400).json({
@@ -75,7 +76,7 @@ userRouter.post('/', (req, res) => {
 });
 
 //patch /users/:id - 사용자 수정
-userRouter.patch('/:id', (req, res) => {
+userRouter.patch('/:id', validateUser, (req, res) => {
   const id = parseInt(req.params.id);
   const { name, email } = req.body;
 
