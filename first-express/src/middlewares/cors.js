@@ -1,20 +1,24 @@
 //CORS 미들웨어 ⭐️⭐️⭐️
+import { isProduction } from '../config/config.js';
 
 export const cors = (req, res, next) => {
   const origin = req.headers.origin;
-  const isDev = process.env.NODE_ENV !== 'production';
 
   const whiteList = [
-    'http://localhost:3000'
+    'https://your-production-site.com',
+    'https://admin.your-site.com',
+    'http://localhost:5000/',
   ];
 
-  const isAllowed = isDev || whiteList.includes(origin);
-  if (isAllowed) {
-    res.headers('Access-Contral-Allow-Origin', origin);
+  const isAllowed = !isProduction || (origin && whiteList.includes(origin));
+
+  if (isAllowed && origin) {
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Credentials', 'true');
+  } else if (!isProduction) {
+    // 개발 환경인데 Origin 헤더가 없는 경우(Postman 등)를 위해 최소한의 허용
+    res.header('Access-Control-Allow-Origin', '*');
   }
-
-  res.headers('Access-Contral-Allow-Origin', '*');
-
   //공통 헤더 설정
   res.header(
     'Access-Control-Allow-Methods',
