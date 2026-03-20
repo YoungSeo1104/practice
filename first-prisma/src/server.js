@@ -7,9 +7,9 @@ const app = express();
 
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.send('Hello, Prisma!');
-});
+// app.get('/', (req, res) => {
+//   res.send('Hello, Prisma!');
+// });
 
 // API 라우터 등록
 app.use('/api', apiRouter);
