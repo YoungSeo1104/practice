@@ -1,3 +1,5 @@
+//원시타입과 리터럴 타입
+
 // number
 let num1: number = 123;
 let num2: number = -123;
@@ -34,4 +36,3 @@ let unde1: undefined = undefined;
 // 리터럴 -> 값
 let numA: 10 = 10;
 let strA: 'hello' = 'hello';
-let boolA: true = false;
