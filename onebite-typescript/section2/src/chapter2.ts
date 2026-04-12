@@ -19,7 +19,6 @@ let doubleArr: number[][] = [
 // 튜플
 // 길이와 타입이 고정된 배열
 let tup1: [number, number] = [1, 2];
-
 let tup2: [number, string, boolean] = [1, '2', true];
 
 // JS로 변환하면서 튜플 기능이 빠지기에 push와 pop을 사용할때 각별히 조심해야 한다!
