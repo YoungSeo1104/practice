@@ -27,3 +27,4 @@ function func(value: number | string | Date | Person) {
 
 console.log(func(10.7)); // 10.7
 console.log(func('hello')); // HELLO
+console.log(func(new Date())); // 현재 시간의 타임스탬프
