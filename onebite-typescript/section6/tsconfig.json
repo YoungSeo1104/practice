@@ -7,7 +7,8 @@
     "strict": true,
     "skipLibCheck": true,
     "moduleDetection": "force",
-    "allowJs": true
+    "allowJs": true,
+    // "noImplicitAny": false
   },
   "include": ["src"]
 }
