@@ -163,54 +163,67 @@ class BucketListApp {
     updateStats() {
         const stats = BucketStorage.getStats();
 
-        this.totalCount.textContent = stats.total;
-        this.completedCount.textContent = stats.completed;
-        this.progressCount.textContent = stats.progress;
-        this.completionRate.textContent = `${stats.completionRate}%`;
+        const animateNumber = (element, newValue) => {
+            if (element.textContent !== newValue.toString()) {
+                element.classList.remove('pulse');
+                void element.offsetWidth;
+                element.classList.add('pulse');
+                element.textContent = newValue;
+            }
+        };
+
+        animateNumber(this.totalCount, stats.total);
+        animateNumber(this.completedCount, stats.completed);
+        animateNumber(this.progressCount, stats.progress);
+        animateNumber(this.completionRate, `${stats.completionRate}%`);
     }
 
     /**
      * 버킷 리스트 항목 HTML 생성
      */
     createBucketItemHTML(item) {
-        const completedClass = item.completed ? 'line-through text-gray-400' : 'text-gray-800';
+        const completedClass = item.completed ? 'line-through text-gray-500' : 'text-gray-800';
         const checkIcon = item.completed ? '✓' : '';
         const checkboxClass = item.completed
-            ? 'bg-green-500 border-green-500 text-white'
-            : 'bg-white border-gray-300';
+            ? 'bg-gradient-to-br from-green-400 to-green-600 border-green-600 text-white shadow-lg'
+            : 'bg-white border-2 border-gray-200 text-gray-400 hover:border-purple-300';
+
+        const completedBg = item.completed ? 'bg-gradient-to-br from-gray-50 to-gray-100 border-l-4 border-l-green-500' : 'bg-white border-l-4 border-l-purple-500 hover:shadow-xl';
+        const dateStr = new Date(item.createdAt).toLocaleDateString('ko-KR');
+        const completedStr = item.completedAt ? new Date(item.completedAt).toLocaleDateString('ko-KR') : '';
 
         return `
-            <div class="bucket-item bg-white rounded-lg shadow-md p-4 flex items-center gap-3 hover:shadow-lg transition-shadow">
+            <div class="bucket-item ${completedBg} rounded-2xl p-6 flex items-center gap-4 shadow-lg transition-all hover:shadow-2xl">
                 <!-- 체크박스 -->
                 <button
-                    class="flex-shrink-0 w-6 h-6 rounded border-2 flex items-center justify-center ${checkboxClass} transition-all hover:scale-110"
+                    class="flex-shrink-0 w-8 h-8 rounded-full border-2 flex items-center justify-center ${checkboxClass} transition-all hover:scale-110 active:scale-95"
                     onclick="app.handleToggle('${item.id}')"
                 >
-                    <span class="text-sm font-bold">${checkIcon}</span>
+                    <span class="text-base font-bold">${checkIcon}</span>
                 </button>
 
-                <!-- 제목 -->
-                <div class="flex-1">
-                    <p class="text-lg ${completedClass} break-words">${this.escapeHtml(item.title)}</p>
-                    <p class="text-xs text-gray-400 mt-1">
-                        ${new Date(item.createdAt).toLocaleDateString('ko-KR')} 생성
-                        ${item.completedAt ? ` · ${new Date(item.completedAt).toLocaleDateString('ko-KR')} 완료` : ''}
+                <!-- 제목 및 정보 -->
+                <div class="flex-1 min-w-0">
+                    <p class="text-lg font-semibold ${completedClass} break-words">${this.escapeHtml(item.title)}</p>
+                    <p class="text-sm text-gray-400 mt-1.5">
+                        📅 ${dateStr}
+                        ${completedStr ? ` · ✅ ${completedStr} 완료` : ''}
                     </p>
                 </div>
 
                 <!-- 버튼 그룹 -->
                 <div class="flex gap-2 flex-shrink-0">
                     <button
-                        class="px-3 py-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200 transition-colors text-sm font-medium"
+                        class="item-btn px-4 py-2 bg-gradient-to-r from-blue-400 to-blue-500 text-white rounded-lg hover:shadow-lg text-sm"
                         onclick="app.openEditModal('${item.id}', '${this.escapeHtml(item.title).replace(/'/g, "\\'")}')"
                     >
-                        수정
+                        ✏️ 수정
                     </button>
                     <button
-                        class="px-3 py-1 bg-red-100 text-red-600 rounded hover:bg-red-200 transition-colors text-sm font-medium"
+                        class="item-btn px-4 py-2 bg-gradient-to-r from-red-400 to-red-500 text-white rounded-lg hover:shadow-lg text-sm"
                         onclick="app.handleDelete('${item.id}', '${this.escapeHtml(item.title).replace(/'/g, "\\'")}')"
                     >
-                        삭제
+                        🗑️ 삭제
                     </button>
                 </div>
             </div>
